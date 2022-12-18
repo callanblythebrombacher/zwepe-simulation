@@ -2,5 +2,8 @@
   "name": "zwepe-simulation",
   "version": "1.0.0",
   "dependencies": {
+    "jsonexport": "^3.2.0",
+    "sqlite": "^4.1.2",
+    "sqlite3": "^5.1.4"
   }
 }
