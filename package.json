@@ -20,6 +20,7 @@
     "@babel/preset-env": "^7.20.2",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-ws": "^5.0.2",
     "jsonexport": "^3.2.0",
     "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5",
