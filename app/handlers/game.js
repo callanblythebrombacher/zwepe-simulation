@@ -1,5 +1,8 @@
+import selectServices from '../services/selectServices'
+import handlerFunctions from './handlerFunctions'
+
 const bettingRound = async () => {
-    const players = getPlayers();
+    const players = await selectServices.getPlayers();
     players.foreach(async (item) => {
         const minimumBet = await getMinimumBet();
         const walletBalance =
@@ -10,7 +13,7 @@ const bettingRound = async () => {
             const bet = {
                 playerID: item.id,
                 betValue: getBetValue(walletBalance),
-                headsOrTail: getBetOption(),
+                headsOrTail: handlerFunctions.getBetOption(),
             };
             await storeBet(bet);
         }
