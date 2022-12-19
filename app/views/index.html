@@ -58,14 +58,18 @@
                     };
                     webSocket.send(dataToSend);
                 }}
+
+            async function clearDB(){
+               await fetch('http://localhost:3000/seed/clearDB', {method:'delete', headers:{'Allow-Access-Control':'*'}})
+            }
         </script>
         <script>
             let submitButton = document.getElementById('submitSimSettings')
-            submitButton.addEventListener('click', function(e){
+            submitButton.addEventListener('click',async function(e){
                 e.preventDefault()
                 console.log('fired')
                 let numberOfPlayers = document.getElementById('numberOfPlayers').value
-                let walletBalance = document.getElementById('walletBalance').value3
+                let walletBalance = document.getElementById('walletBalance').value
                 let betValue1 = document.getElementById('betValue1').value
                 let betValue2 = document.getElementById('betValue2').value
                 let betValue3 = document.getElementById('betValue3').value
@@ -78,6 +82,7 @@
                         "betValue3":betValue3
                     }
                 }
+                await clearDB()
                 websocket(JSON.stringify(data))
             })
         </script>
