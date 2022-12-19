@@ -1,15 +1,20 @@
-import sqlite3 from 'sqlite3'
-import { open } from 'sqlite'
+import sqlite3 from 'sqlite3';
 
-// this is a top-level await
-const connector  = async () => {
-    // open the database
-    const db = await open({
-        filename: './sqlite.db',
-        driver: sqlite3.Database
-    })
+const sqlite = sqlite3.verbose();
 
-    return db
-}
+const connector = async () => {
+    const db = await new sqlite.Database(
+        process.cwd() + '/app/database/sqlite.db',
+        sqlite3.OPEN_READWRITE,
+        (err) => {
+            if (err) {
+                console.log(err, 'sql error:');
+                db.close();
+            }
+        }
+    );
 
-export default connector()
+    return db;
+};
+
+export default connector;

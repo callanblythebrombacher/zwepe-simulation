@@ -7,7 +7,9 @@
     "transpile": "babel ./app --out-dir build --copy-files",
     "clean": "rimraf build",
     "build": "npm-run-all clean transpile",
-    "dev": "NODE_ENV=development npm-run-all build server",
+    "windows:node:ready": "npm install -g win-node-env",
+    "startDev": "NODE_ENV=development npm-run-all build server",
+    "dev": "npm-run-all windows:node:ready startDev",
     "prod": "NODE_ENV=production npm-run-all build server",
     "watch:dev": "nodemon",
     "test": "jest"
@@ -16,6 +18,9 @@
     "@babel/cli": "^7.19.3",
     "@babel/core": "^7.20.5",
     "@babel/preset-env": "^7.20.2",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-ws": "^5.0.2",
     "jsonexport": "^3.2.0",
     "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5",
@@ -44,6 +49,7 @@
     "testEnvironment": "node"
   },
   "devDependencies": {
-    "jest": "^29.3.1"
+    "jest": "^29.3.1",
+    "prettier": "^2.8.1"
   }
 }

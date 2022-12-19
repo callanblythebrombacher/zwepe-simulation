@@ -1,9 +1,9 @@
-const player = (bet, betAmount, balance)=>{}
+const player = (bet, betAmount, balance) => {};
 
-const house = (balance)=>{}
+const house = (balance) => {};
 
-const outCome = ()=>{}
+const outCome = () => {};
 
-const coin=()=>{}
+const coin = () => {};
 
-const csvCompiler =(data)=>{}
+const csvCompiler = (data) => {};
