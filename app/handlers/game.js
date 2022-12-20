@@ -1,10 +1,10 @@
 import selectServices from '../services/selectServices'
 import handlerFunctions from './handlerFunctions'
-
+import insertServices from "../services/insertServices";
 const bettingRound = async () => {
     const players = await selectServices.getPlayers();
-    players.foreach(async (item) => {
-        const minimumBet = await getMinimumBet();
+    for (const item of players) {
+        const minimumBet = await selectServices.getMinimumBet();
         const walletBalance =
             typeof item.wallet !== 'number'
                 ? parseInt(item.wallet)
@@ -12,20 +12,22 @@ const bettingRound = async () => {
         if (walletBalance > minimumBet) {
             const bet = {
                 playerID: item.id,
-                betValue: getBetValue(walletBalance),
+                betValue: await handlerFunctions.getBetValue(walletBalance),
                 headsOrTail: handlerFunctions.getBetOption(),
             };
-            await storeBet(bet);
+            await insertServices.storeBets(bet);
         }
-    });
+    }
 };
 
 const outCome = async () => {
     await bettingRound();
-    const flipResult = await getBetOption();
-    const totalWinnings = await getTotalWinnigs(flipResult);
-    const totalLosings = await getTotalLosings(flipResult);
-    const houseTotal = await getHouseTotal(totalLosings, totalWinnings);
+    const flipResult = handlerFunctions.getBetOption();
+    const config =  await selectServices.getConfig()
+    const housePercentage = parseInt(config.housePercentage)
+    const totalLosings = await selectServices.getTotalLosings(flipResult);
+    const totalWinnings = await selectServices.getTotalWinnings(flipResult, totalLosings, housePercentage);
+    const houseTotal = await handlerFunctions.getHouseTotal(totalLosings, housePercentage);
     await storeBetResults(flipResult, totalLosings, totalWinnings, houseTotal);
     await compensatePlayers();
 };

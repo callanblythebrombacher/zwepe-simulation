@@ -1,4 +1,5 @@
 import connector from '../database/connector';
+import handlerFunctions from "../handlers/handlerFunctions";
 
 const getPlayers = async () => {
     const db = await connector();
@@ -46,9 +47,9 @@ const getBets = async () => {
                 console.log(err);
             } else {
                 const options = JSON.parse(row.options);
-                const betValue1 = options.betValue1;
-                const betValue2 = options.betValue2;
-                const betValue3 = options.betValue3;
+                const betValue1 = parseInt(options.betValue1);
+                const betValue2 = parseInt(options.betValue2);
+                const betValue3 = parseInt(options.betValue3);
 
                 const valueArray = [betValue1, betValue2, betValue3];
                 result = valueArray;
@@ -58,59 +59,62 @@ const getBets = async () => {
     return result;
 };
 
-const getTotalWinnigs = async () => {
+const getTotalWinnings = async (betItem, totalLosings, housePercentage) => {
     const db = await connector();
-    let result;
+    let result= 0;
     await db.serialize(async () => {
-        await db.get('select total_winnings from bets', [], (err, row) => {
+        await db.each('select bet_total, bet_item from ledger limit (select count(id) from player) order by id desc', [], (err, row) => {
             if (err) {
                 console.log(err);
             } else {
-                result = row.total_winnings;
+                if(betItem === row.bet_item) {
+                    result += row.bet_total;
+                }
             }
         });
     });
-    return result;
+    return result + (totalLosings -handlerFunctions.getHouseTotal(totalLosings, housePercentage));
 };
-const getTotalLosings = async () => {
+
+const getTotalLosings = async (betItem) => {
     const db = await connector();
-    let result;
+    let result= 0;
     await db.serialize(async () => {
-        await db.get('select total_Losings from bets', [], (err, row) => {
+        await db.each('select bet_total, bet_item from ledger limit (select count(id) from player) order by id desc', [], (err, row) => {
             if (err) {
                 console.log(err);
             } else {
-                result = row.total_Losings;
+                if(betItem !== row.bet_item) {
+                    result += row.bet_total;
+                }
             }
         });
     });
     return result;
 };
 
-const getHouseTotal = async () => 
-{
+const getConfig = async () =>{
     const db = await connector();
-    let result;
-    await db.serialize(async () => 
-    {
-        await db.get('select house_winnings from bets', [], (err, row) => {
-            if (err) 
-            {
+    let result= 0;
+    await db.serialize(async () => {
+        await db.get('select options from config', [], (err, row) => {
+            if (err) {
                 console.log(err);
             } else {
-                result = row.house_winnings;
+               result = row.options
             }
         });
     });
     return result;
-};
+}
+
 
 export default 
 {
     getPlayers,
     getMinimumBet,
     getBets,
-    getTotalWinnigs,
+    getTotalWinnings,
     getTotalLosings,
-    getHouseTotal,
+    getConfig
 };
