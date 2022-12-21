@@ -33,7 +33,12 @@
                 id="betValue3"
                 placeholder="Bet Value 3"
                 />
-
+            <label for="housePercentage">House Percentage</label>
+            <input
+                type="text"
+                id="housePercentage"
+                placeholder="Enter the house percentage as a decimal value"
+                />
             <button id="submitSimSettings">Set Simulation Settings</button>
             <p id="percentage"></p>
     </body>
@@ -73,6 +78,7 @@
                 let betValue1 = document.getElementById('betValue1').value
                 let betValue2 = document.getElementById('betValue2').value
                 let betValue3 = document.getElementById('betValue3').value
+                let housePercentage = document.getElementById('housePercentage').value
                 let data = {
                     "walletBalance":walletBalance,
                     "numberOfPlayers":numberOfPlayers,
@@ -80,7 +86,8 @@
                         "betValue1":betValue1,
                         "betValue2":betValue2,
                         "betValue3":betValue3
-                    }
+                    },
+                    'housePercentage':housePercentage
                 }
                 await clearDB()
                 websocket(JSON.stringify(data))
