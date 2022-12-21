@@ -1,20 +1,21 @@
 import connector from '../database/connector';
 import handlerFunctions from "../handlers/handlerFunctions";
 
-const getPlayers = async () => {
-    const db = await connector();
-    let result;
-    await db.serialize(async () => {
-        await db.all('select * from player;', [], (err, rows) => {
-            if (err) {
-                console.log(err);
-            } else {
-                result = rows;
-            }
+const getPlayers = () => {
+    const db = connector();
+    return new Promise((resolve, reject) => {
+        db.serialize(async () => {
+            await db.all('select * from player', [], (err, rows) => {
+                if (err) {
+                    console.log('sqliteError: ', err);
+                    reject(err)
+                } else {
+                    db.close();
+                    resolve(rows)
+                }
+            });
         });
     });
-    await db.close();
-    return result;
 };
 
 const getMinimumBet = async () => {
