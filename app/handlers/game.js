@@ -32,4 +32,4 @@ const outCome = async () => {
     await compensatePlayers();
 };
 
-export default outCome();
+export default outCome;

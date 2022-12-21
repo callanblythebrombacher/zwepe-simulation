@@ -39,8 +39,16 @@
                 id="housePercentage"
                 placeholder="Enter the house percentage as a decimal value"
                 />
-            <button id="submitSimSettings">Set Simulation Settings</button>
+            <label for="numberOfFlips">Number of Flips</label>
+            <input
+                type="number"
+                id="numberOfFlips"
+                placeholder="Enter the number of coin flips in a game"
+                />
+            <button id="submitSimSettings" >Set Simulation Settings</button>
             <p id="percentage"></p>
+            <button id="startButton" style="display: none" >Start Simulation</button>
+            <p style="display: none" id="percentage2"></p>
     </body>
     <footer>
         <script>
@@ -59,6 +67,8 @@
                         percentageUi.innerText = percentage
                         if(percentage === '100%'){
                             webSocket.close()
+                            document.getElementById('submitSimSettings').disabled = false
+                            document.getElementById('startButton').style.display = 'block'
                         }
                     };
                     webSocket.send(dataToSend);
@@ -67,11 +77,34 @@
             async function clearDB(){
                await fetch('http://localhost:3000/seed/clearDB', {method:'delete', headers:{'Allow-Access-Control':'*'}})
             }
+
+            function startSim() {
+                const percentageUi = document.getElementById('percentage2')
+                percentageUi.style.display = 'block'
+                let webSocket = new WebSocket('ws://localhost:3000/start')
+                webSocket.onopen = function (evt) {
+                    console.log('CONNECTED');
+                    startFunc();
+                };
+                function startFunc() {
+                    webSocket.onmessage = function (e) {
+                        console.log(e);
+                        let percentage = e.data + '%'
+                        percentageUi.innerText = percentage
+                        if(percentage === '100%'){
+                            document.getElementById('startButton').disabled = false
+                            webSocket.close()
+                        }
+                    };
+                    webSocket.send('ping');
+                }
+            }
         </script>
         <script>
             let submitButton = document.getElementById('submitSimSettings')
             submitButton.addEventListener('click',async function(e){
                 e.preventDefault()
+                submitButton.disabled = true
                 console.log('fired')
                 let numberOfPlayers = document.getElementById('numberOfPlayers').value
                 let walletBalance = document.getElementById('walletBalance').value
@@ -91,6 +124,14 @@
                 }
                 await clearDB()
                 websocket(JSON.stringify(data))
+            })
+
+            let startButton  = document.getElementById('startButton')
+            startButton.addEventListener('click', function(e){
+                e.preventDefault()
+                startButton.disabled = true
+                console.log('started')
+                startSim()
             })
         </script>
     </footer>

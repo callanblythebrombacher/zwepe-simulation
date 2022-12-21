@@ -1,7 +1,6 @@
 import express from 'express';
 import enableWs from 'express-ws';
 import faker from '../database/dbSeeder/faker';
-import {re} from "@babel/core/lib/vendor/import-meta-resolve";
 const router = express.Router();
 enableWs(router);
 
