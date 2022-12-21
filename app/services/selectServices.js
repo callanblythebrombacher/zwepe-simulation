@@ -35,6 +35,7 @@ const getMinimumBet = async () => {
             }
         });
     });
+    await db.close()
     return result;
 };
 
@@ -56,6 +57,7 @@ const getBets = async () => {
             }
         });
     });
+    await db.close()
     return result;
 };
 
@@ -73,6 +75,7 @@ const getTotalWinnings = async (betItem, totalLosings, housePercentage) => {
             }
         });
     });
+    await db.close()
     return result + (totalLosings -handlerFunctions.getHouseTotal(totalLosings, housePercentage));
 };
 
@@ -90,6 +93,7 @@ const getTotalLosings = async (betItem) => {
             }
         });
     });
+    await db.close()
     return result;
 };
 
@@ -105,6 +109,7 @@ const getConfig = async () =>{
             }
         });
     });
+    await db.close()
     return result;
 }
 

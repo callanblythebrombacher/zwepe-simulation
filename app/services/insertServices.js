@@ -17,6 +17,7 @@ const storeBets = async (bets) => {
             }
         );
     });
+    db.close()
 };
 
 const storeBetResults = async (betResults) => 
@@ -39,6 +40,7 @@ const storeBetResults = async (betResults) =>
             }
         );
     });
+    db.close()
 };
 
 export default {

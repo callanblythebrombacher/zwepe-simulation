@@ -2,8 +2,8 @@ import sqlite3 from 'sqlite3';
 
 const sqlite = sqlite3.verbose();
 
-const connector = async () => {
-    const db = await new sqlite.Database(
+const connector =  () => {
+    const db =  new sqlite.Database(
         process.cwd() + '/app/database/sqlite.db',
         sqlite3.OPEN_READWRITE,
         (err) => {
@@ -14,6 +14,7 @@ const connector = async () => {
         }
     );
 
+    db.configure('busyTimeout', 5000)
     return db;
 };
 
