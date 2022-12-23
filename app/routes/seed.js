@@ -4,12 +4,14 @@ import faker from '../database/dbSeeder/faker';
 const router = express.Router();
 enableWs(router);
 
-router.delete('/clearDB',  (req, res) => {
+router.delete('/clearDB',  (req, res) =>
+{
     faker.clearDB();
     res.status(200).send('db cleared');
 });
 
-router.ws('/',  function (ws, req) {
+router.ws('/',  function (ws, req)
+{
 
     let cnt = 0
      ws.on('message',  function (msg) {

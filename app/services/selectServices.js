@@ -42,12 +42,15 @@ const getMinimumBet = async () => {
     });
 };
 
-const getBets = async () => {
+const getBets = async () =>
+{
     const db = await connector();
     return new Promise((resolve,reject) =>
     {
-     db.serialize(async () => {
-        await db.get('select options from config', [], (err, row) => {
+     db.serialize(async () =>
+     {
+        await db.get('select options from config', [], (err, row) =>
+        {
             if (err) {
                 console.log('sqliteError',err);
                 reject(err)
@@ -66,18 +69,23 @@ const getBets = async () => {
 
     });
 
-
 };
 
-const getTotalWinnings = async (betItem, totalLosings, housePercentage) => {
+const getTotalWinnings = async (betItem, totalLosings, housePercentage) =>
+{
     const db = await connector();
     let result= 0;
-    await db.serialize(async () => {
-        await db.each('select bet_total, bet_item from ledger limit (select count(id) from player) order by id desc', [], (err, row) => {
-            if (err) {
+    await db.serialize(async () =>
+    {
+        await db.each('select bet_total, bet_item from ledger order by id desc limit (select count(id) from player)', [], (err, row) =>
+        {
+            if (err)
+            {
                 console.log(err);
-            } else {
-                if(betItem === row.bet_item) {
+            } else
+            {
+                if(betItem === row.bet_item)
+                {
                     result += row.bet_total;
                 }
             }

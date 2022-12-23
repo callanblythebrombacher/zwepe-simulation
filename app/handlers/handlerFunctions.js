@@ -11,7 +11,7 @@ const getBetOption = () => {
 
 const getBetValue = async (walletBalance) =>
 {
-    const bettingOptions = await selectServices.getBets()
+    const bettingOptions = await selectServices.getBets().then(r=>{return r})
     let run = true
     while(run)
     {
