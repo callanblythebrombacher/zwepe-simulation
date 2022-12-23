@@ -1,16 +1,17 @@
 import selectServices from '../services/selectServices'
 import handlerFunctions from './handlerFunctions'
 import insertServices from "../services/insertServices";
-const bettingRound = async () => {
+const bettingRound = async () =>
+{
     const players = await selectServices.getPlayers().then(r=>{return r});
-    console.log(players)
-    /*for (const item of players) {
-        const minimumBet = await selectServices.getMinimumBet();
+    for (const item of players) {
+        const minimumBet = await selectServices.getMinimumBet().then(r=>{return r});
         const walletBalance =
             typeof item.wallet !== 'number'
                 ? parseInt(item.wallet)
                 : item.wallet;
-        if (walletBalance > minimumBet) {
+        if (walletBalance > minimumBet)
+        {
             const bet = {
                 playerID: item.id,
                 betValue: await handlerFunctions.getBetValue(walletBalance),
@@ -18,7 +19,7 @@ const bettingRound = async () => {
             };
             await insertServices.storeBets(bet);
         }
-    }*/
+    }
 };
 
 const outCome = async () => {
