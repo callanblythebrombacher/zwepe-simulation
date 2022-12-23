@@ -9,10 +9,12 @@ const getBetOption = () => {
     }
 };
 
-const getBetValue = async (walletBalance) => {
+const getBetValue = async (walletBalance) =>
+{
     const bettingOptions = await selectServices.getBets()
     let run = true
-    while(run) {
+    while(run)
+    {
         let choice = Math.random()
 
         if (choice < 0.333 && walletBalance > bettingOptions[0]) {

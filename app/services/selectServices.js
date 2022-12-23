@@ -20,33 +20,37 @@ const getPlayers = () => {
 
 const getMinimumBet = async () => {
     const db = await connector();
-    let result;
-    await db.serialize(async () => {
+    return new Promise((resolve, reject) =>{
+     db.serialize(async () => {
         await db.get('select options from config', [], (err, row) => {
             if (err) {
-                console.log(err);
-            } else {
+                console.log( 'sqliteError',err);
+                reject(err)
+            } else
+            {
                 const options = JSON.parse(row.options);
                 const betValue1 = options.betValue1;
                 const betValue2 = options.betValue2;
                 const betValue3 = options.betValue3;
 
                 const valueArray = [betValue1, betValue2, betValue3];
-                result = valueArray.sort((a, b) => a - b)[0];
+                db.close()
+               resolve(valueArray.sort((a, b) => a - b)[0]);
             }
         });
     });
-    await db.close()
-    return result;
+    });
 };
 
 const getBets = async () => {
     const db = await connector();
-    let result;
-    await db.serialize(async () => {
+    return new Promise((resolve,reject) =>
+    {
+     db.serialize(async () => {
         await db.get('select options from config', [], (err, row) => {
             if (err) {
-                console.log(err);
+                console.log('sqliteError',err);
+                reject(err)
             } else {
                 const options = JSON.parse(row.options);
                 const betValue1 = parseInt(options.betValue1);
@@ -54,12 +58,15 @@ const getBets = async () => {
                 const betValue3 = parseInt(options.betValue3);
 
                 const valueArray = [betValue1, betValue2, betValue3];
-                result = valueArray;
+                db.close()
+                resolve(valueArray);
             }
         });
     });
-    await db.close()
-    return result;
+
+    });
+
+
 };
 
 const getTotalWinnings = async (betItem, totalLosings, housePercentage) => {
