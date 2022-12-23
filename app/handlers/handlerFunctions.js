@@ -1,6 +1,6 @@
 import selectServices from '../services/selectServices'
 
-const getBetOption = () => {
+const getBetOption = async () => {
     const result = Math.random();
     if (result > 0.5) {
         return 'heads';
