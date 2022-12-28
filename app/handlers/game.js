@@ -1,9 +1,9 @@
 import selectServices from '../services/selectServices'
 import handlerFunctions from './handlerFunctions'
 import insertServices from "../services/insertServices";
-const bettingRound = async () =>
+const bettingRound = async (players, cnt) =>
 {
-    const players = await selectServices.getPlayers().then(r=>{return r});
+    console.log(cnt)
     for (const item of players) {
         const minimumBet = await selectServices.getMinimumBet().then(r=>{return r});
         const walletBalance =
@@ -23,16 +23,21 @@ const bettingRound = async () =>
     }
 };
 
-const outCome = async () => {
-    await bettingRound();
-    const flipResult = handlerFunctions.getBetOption();
+const outCome = async (players, cnt) => {
+    await bettingRound(players, cnt).then( async (r)=>{
     const config =  await selectServices.getConfig()
-    const housePercentage = parseInt(config.housePercentage)
-    const totalLosings = await selectServices.getTotalLosings(flipResult);
-    const totalWinnings = await selectServices.getTotalWinnings(flipResult, totalLosings, housePercentage);
-    const houseTotal = await handlerFunctions.getHouseTotal(totalLosings, housePercentage);
-    await storeBetResults(flipResult, totalLosings, totalWinnings, houseTotal);
-    await compensatePlayers();
-};
+        let totalWinnings;
+        let houseTotal;
+        let totalLosings;
+    const housePercentage = 0.1;
+        const flipResult = await handlerFunctions.getBetOption().then(async r=>{
+    totalLosings = await selectServices.getTotalLosings(flipResult).then(async r=> {
+    totalWinnings = await selectServices.getTotalWinnings(flipResult, totalLosings, housePercentage).then(async r=>{
+    houseTotal = await handlerFunctions.getHouseTotal(totalLosings, housePercentage).then(async r => {
+        console.log(flipResult + ' : ' + totalLosings + ' : ' + totalWinnings + ' : ' + houseTotal)
+    await insertServices.storeBetResults(flipResult, totalLosings, totalWinnings, houseTotal).then(async r => {
+        //await compensatePlayers()
+    });});});});})
+})};
 
 export default outCome;

@@ -30,7 +30,7 @@ const getBetValue = async (walletBalance) =>
     }
 }
 
-const getHouseTotal = ( totalLosings, housePercentage) =>
+const getHouseTotal = async ( totalLosings, housePercentage) =>
 {
     return totalLosings * housePercentage
 };

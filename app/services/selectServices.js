@@ -99,7 +99,7 @@ const getTotalLosings = async (betItem) => {
     const db = await connector();
     let result= 0;
     await db.serialize(async () => {
-        await db.each('select bet_total, bet_item from ledger limit (select count(id) from player) order by id desc', [], (err, row) => {
+        await db.each('select bet_total, bet_item from ledger  order by id desc limit (select count(id) from player)', [], (err, row) => {
             if (err) {
                 console.log(err);
             } else {

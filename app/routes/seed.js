@@ -30,13 +30,13 @@ router.ws('/',  function (ws, req)
             const timeInterval = setInterval(()=> {
                 cnt += 1
                 console.log(cnt)
-                faker.createPlayers(seedData.walletBalance)
+                faker.createPlayers(seedData.walletBalance).then(r=>{
                 const percentSeed = (cnt / numberOfPlayers) * 100;
                 ws.send(Math.ceil(percentSeed));
                 if(cnt  === parseInt(numberOfPlayers)) {
                     clearInterval(timeInterval)
                 }
-                }, 3)
+                })}, 3)
             faker.createConfig(configData);
         } else {
             ws.send('missing data in msg');

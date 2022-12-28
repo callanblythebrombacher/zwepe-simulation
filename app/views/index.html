@@ -61,7 +61,6 @@
 
                 function sendfunc(dataToSend) {
                     webSocket.onmessage = function (e) {
-                        console.log(e);
                         const percentageUi = document.getElementById('percentage')
                         let percentage = e.data + '%'
                         percentageUi.innerText = percentage
@@ -75,7 +74,7 @@
                 }}
 
             async function clearDB(){
-               await fetch('http://localhost:3000/seed/clearDB', {method:'delete', headers:{'Allow-Access-Control':'*'}})
+               return await fetch('http://localhost:3000/seed/clearDB', {method:'delete', headers:{'Allow-Access-Control':'*'}})
             }
 
             function startSim() {
@@ -122,8 +121,12 @@
                     },
                     'housePercentage':housePercentage
                 }
-                await clearDB()
-                websocket(JSON.stringify(data))
+                await clearDB().then(r=> {
+
+                    if(r.status === 200) {
+                        websocket(JSON.stringify(data))
+                    }
+                })
             })
 
             let startButton  = document.getElementById('startButton')

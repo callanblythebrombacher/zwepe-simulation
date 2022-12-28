@@ -1,12 +1,12 @@
 import connector from '../connector';
 
-const createPlayers = (initialWalletValue) => {
+const createPlayers = async (initialWalletValue) => {
     const db = new connector();
-    db.serialize(()=> {
-        db.run(
+    await db.serialize(async ()=> {
+       await db.run(
             'insert into player (wallet, total_winnings, total_losings) values (?, ?, ?)',
             [initialWalletValue, 0, 0],
-            async (err) => {
+            (err) => {
                 if (err) {
                     console.log(err);
                 }
@@ -26,6 +26,14 @@ const clearDB =  () => {
         }).run('delete from config;', [], (err) => {
             if (err) {
                 console.log(err);
+            }
+        }).run('delete from ledger;', [], (err)=>{
+            if(err){
+                console.log(err)
+            }
+        }).run('delete from bets', [], (err)=>{
+            if(err){
+                console.log(err)
             }
         })
     });
