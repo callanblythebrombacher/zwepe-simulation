@@ -26,21 +26,25 @@ const storeBetResults = async (betResults) =>
 
     const db = await connector();
 
-    await db.serialize(async () => 
+    return new Promise((resolve, reject) =>
     {
-        await db.run(
+        db.serialize(async () =>
+    {
+        await db.run
+        (
             'insert into bets(heads_or_tails,total_losings,total_winnings,house_winnings) VALUES (?,?,?,?)',
             [flipResult, totalLosings, totalWinnings, houseTotal],
             (err) => {
                 if (err) {
                     console.log(err);
+                    reject(err)
                 } else {
-                    return true;
+                    db.close()
+                    resolve(true);
                 }
             }
-        );
+        )});
     });
-    db.close()
 };
 
 export default {

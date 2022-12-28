@@ -57,6 +57,14 @@ const createConfig =  (data) => {
     db.close( (err) =>{ if(err) console.log(err);});
 };
 
+const countFunction = () =>
+{
+    const timeInterval = setInterval(() =>{
+
+
+    })
+}
+
 export default {
     createPlayers,
     clearDB,
