@@ -1,1 +1,1 @@
-const compensate = ()=>{}
+const compensatePlayers = ()=>{}

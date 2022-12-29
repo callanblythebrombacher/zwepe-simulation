@@ -13,7 +13,7 @@ const createPlayers = async (initialWalletValue) => {
             }
         )
     })
-    db.close( (err) =>{ if(err) console.log(err);});
+   db.close( (err) =>{ if(err) console.log(err);});
 };
 
 const clearDB =  () => {
@@ -57,13 +57,23 @@ const createConfig =  (data) => {
     db.close( (err) =>{ if(err) console.log(err);});
 };
 
-const countFunction = () =>
-{
-    const timeInterval = setInterval(() =>{
+let cnt = 0;
 
+const timeInterval = setInterval(function() {
 
-    })
-}
+    cnt += 1
+
+    while (cnt <= 5000) {
+
+        cnt++
+        // do your thing
+
+         if (cnt === 10000) {
+            clearInterval(timeInterval)
+             // do your thing
+        }
+    }
+})
 
 export default {
     createPlayers,

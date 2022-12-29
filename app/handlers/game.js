@@ -29,15 +29,17 @@ const outCome = async (players, cnt) => {
         let totalWinnings;
         let houseTotal;
         let totalLosings;
-    const housePercentage = 0.1;
+        const housePercentage = 0.1;
         const flipResult = await handlerFunctions.getBetOption().then(async r=>{
     totalLosings = await selectServices.getTotalLosings(flipResult).then(async r=> {
     totalWinnings = await selectServices.getTotalWinnings(flipResult, totalLosings, housePercentage).then(async r=>{
     houseTotal = await handlerFunctions.getHouseTotal(totalLosings, housePercentage).then(async r => {
-        console.log(flipResult + ' : ' + totalLosings + ' : ' + totalWinnings + ' : ' + houseTotal)
-    await insertServices.storeBetResults(flipResult, totalLosings, totalWinnings, houseTotal).then(async r => {
+    await insertServices.storeBetResults(flipResult, totalLosings, totalWinnings, houseTotal).then(async r =>
+    {
         //await compensatePlayers()
-    });});});});})
+    });}
+    );});});})
 })};
+
 
 export default outCome;
